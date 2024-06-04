@@ -1,31 +1,55 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>PHP + MYSQL</title>
+    <title>Куликова Полина</title>
 </head>
 <body>
-<h1>Php</h1>
+<form action="index2.php" method="post">
+    <label>
+        <br> Введите Ваш email:
+        <input name="email" required type="email">
+    </label>
+    <label>
+        <br> Выберете категорию:
+        <select name="category" required>
+            <option value="cars">Машинки</option>
+            <option value="dolls">Куклы</option>
+            <option value="lego">Лего</option>
+        </select>
+    </label>
+    <label>
+        <br> Заголовок:
+        <input name="title" required type="text">
+    </label>
+    <label>
+        <br>Описание:
+        <textarea name="description" ></textarea>
+    </label>
+    <label>
+        <br> <input type="submit">
+    </label>
+</form>
 <?php
-    $mysqli = new mysqli('db', 'root', 'helloworld', 'web');
+$container = 'db';
+$username = 'root';
+$password = 'helloworld';
+$database = 'MySQL';
+$port = 3306;
 
-    if (mysqli_connect_errno()){
-        printf("Подключение к серверу MySQL невозможно. Код ошибки: %s\n", mysqli_connect_error());
-        exit;
-    }
-    $mysqli->query('INSERT INTO ad(email, title, description, category) VALUES("test@test.com", "title", "desc", "other")');
-    if ($result = $mysqli->query('SELECT * FROM ad ORDER BY created DESC ')){
+$BASE = new mysqli($container, $username, $password, $database, $port);
 
-        print("Ads:\n");
+foreach ($BASE->query("SELECT * FROM web.ad") as $row) {
+    $category = $row['category'];
+    $title = $row['title'];
+    $description = $row['description'];
+    $email = $row['email'];
+    echo "<p> $email -> $title -> $description -> $category </p>";
+}
 
-        while ($row = $result->fetch_assoc()){
-            printf("%s (%s)\n", $row['email'], $row['title']);
-        }
-    }
-    $result->close();
 ?>
 </body>
 </html>
